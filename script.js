@@ -15,6 +15,8 @@
 /* Для добавления предсказания в список воспользуйся шаблоном forecast-item */
 
 const button = document.querySelector(".forecast-btn");
+const forecastsList = document.querySelector(".forecasts");
+
 const forecast1 = "Сегодня вечером тебя ожидает приятный сюрприз";
 const forecast2 = "Очень скоро сбудется то, о чём ты мечтаешь";
 const forecast3 = "Ты на верном пути";
@@ -25,22 +27,23 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+function createNewForecastItem(title, text) {
+    const template = document.querySelector("#forecast-item");
+    const newForecastItem = template.content.cloneNode(true);
+    newForecastItem.querySelector("h3").textContent = title;
+    newForecastItem.querySelector("p").textContent = text;
+    forecastsList.prepend(newForecastItem);
+}
+
 button.addEventListener('click', function() {
     const currentForecast = document.querySelector(".current-forecast h1");
     const currentPercent = document.querySelector(".current-forecast p");
-    const forecastsList = document.querySelector(".forecasts");
-    const forecastItem = document.querySelector(".forecast-item");
-    const previousForecast = document.querySelector(".forecast-item h3");
-    const previousPercent = document.querySelector(".forecast-item p");
 
     const forecastNumber = getRandomInt(1, 6);
     const randomPercent = getRandomInt(0, 101);
 
-    if (currentPercent) {
-        previousForecast.textContent = currentForecast;
-        previousPercent.textContent = `Вероятность: ${currentPercent}%`;
-        forecastItem.append(previousForecast, previousPercent);
-        forecastsList.prepend(forecastItem);
+    if (currentForecast.textContent) {
+        createNewForecastItem(currentForecast.textContent, currentPercent.textContent);
     }
 
     currentPercent.textContent = `Вероятность: ${randomPercent}%`;
